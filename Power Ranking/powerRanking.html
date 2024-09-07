@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIG10 24-25 Power Ranking</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap');
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(120deg, #f0f4f8, #d9e8ff);
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            margin: 0;
+            height: 120vh;
+        }
+        .title {
+            font-size: 36px;
+            font-weight: bold;
+            fill: #2c3e50;
+            text-anchor: middle;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 8px;
+            font: 14px sans-serif;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: bold;
+            color: white;
+            background: rgba(40, 116, 174, 0.9);
+            border-radius: 8px;
+            pointer-events: none;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .circle {
+            fill: #2874ae;
+            stroke: white;
+            stroke-width: 2px;
+            opacity: 0;
+            transition: r 0.3s, opacity 0.3s;
+        }
+        .circle:hover {
+            fill: #2874ae;
+            r: 8;
+        }
+        .line {
+            fill: none;
+            stroke: url(#lineGradient);
+            stroke-width: 4;
+            filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.2));
+        }
+        .axis text {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            fill: #2c3e50;
+        }
+        .axis path,
+        .axis line {
+            stroke: #b2bec3;
+            stroke-width: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <svg width="1000" height="600"></svg>
+    <script>
+        const data = [
+            { date: new Date(Date.UTC(2024, 0, 10)), ranking: 12 }, 
+            { date: new Date(Date.UTC(2024, 0, 25)), ranking: 8 },
+            { date: new Date(Date.UTC(2024, 1, 2)), ranking: 7 },
+            { date: new Date(Date.UTC(2024, 1, 9)), ranking: 10 },
+            { date: new Date(Date.UTC(2024, 1, 16)), ranking: 8 },
+            { date: new Date(Date.UTC(2024, 1, 27)), ranking: 5 },
+            { date: new Date(Date.UTC(2024, 2, 8)), ranking: 6 },
+            { date: new Date(Date.UTC(2024, 2, 17)), ranking: 4 },
+            { date: new Date(Date.UTC(2024, 2, 31)), ranking: 2 },
+            { date: new Date(Date.UTC(2024, 3, 10)), ranking: 2 },
+            { date: new Date(Date.UTC(2024, 3, 21)), ranking: 4 },
+            { date: new Date(Date.UTC(2024, 4, 2)), ranking: 3 }
+        ];
+    
+        const svg = d3.select("svg"),
+            margin = {top: 100, right: 65, bottom: 70, left: 90},
+            width = +svg.attr("width") - margin.left - margin.right + 25,
+            height = +svg.attr("height") - margin.top - margin.bottom;
+    
+        const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+    
+        // Viz frame
+        g.append("rect")
+            .attr("x", -55) 
+            .attr("y", -margin.top + 10)
+            .attr("width", width + 90)
+            .attr("height", height + margin.top + margin.bottom - 30)
+            .attr("rx", 15)
+            .attr("ry", 15)
+            .attr("fill", "none")
+            .attr("stroke", "#b2bec3")
+            .attr("stroke-width", 2.5);
+    
+        g.append("text")
+            .attr("class", "title")
+            .attr("x", width / 2)
+            .attr("y", -40)
+            .text("Men's Tennis 2024-25 BIG10 Ranking");
+    
+        const x = d3.scaleTime()
+            .domain([new Date(Date.UTC(2023, 11, 27)), new Date(Date.UTC(2024, 4, 10))])
+            .range([0, width]);
+    
+        const y = d3.scaleLinear()
+            .domain([18, 1])
+            .range([height, 0]);
+    
+        const line = d3.line()
+            .x(d => x(d.date))
+            .y(d => y(d.ranking));
+    
+        svg.append("defs").append("linearGradient")
+            .attr("id", "lineGradient")
+            .attr("gradientUnits", "userSpaceOnUse")
+            .attr("x1", 0).attr("y1", 0)
+            .attr("x2", width).attr("y2", 0)
+          .selectAll("stop")
+            .data([
+              {offset: "0%", color: "#42a5f5"},
+              {offset: "100%", color: "#2874ae"}
+            ])
+          .enter().append("stop")
+            .attr("offset", d => d.offset)
+            .attr("stop-color", d => d.color);
+    
+        g.append("g")
+            .attr("class", "axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x).ticks(d3.timeMonth.every(1)).tickFormat(d3.timeFormat("%B")));
+    
+        g.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(y).ticks(18).tickFormat(d3.format("d")));
+    
+        const path = g.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("d", line);
+    
+        const totalLength = path.node().getTotalLength();
+    
+        const image = g.append("image")
+            .attr("xlink:href", "ucla.svg.png")
+            .attr("width", 50)
+            .attr("height", 50);
+    
+        const circles = g.selectAll(".circle")
+            .data(data)
+            .enter().append("circle")
+            .attr("class", "circle")
+            .attr("cx", d => x(d.date))
+            .attr("cy", d => y(d.ranking))
+            .attr("r", 6);
+    
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip");
+    
+        const formatDate = d3.utcFormat("%B %-d"); // Updated to utcFormat
+    
+        circles.on("mouseover", function(event, d) {
+                tooltip.transition().duration(200).style("opacity", 1);
+                tooltip.html(`Date: ${formatDate(d.date)}<br>Ranking: ${d.ranking}`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function() {
+                tooltip.transition().duration(50).style("opacity", 0);
+            });
+    
+        path.attr("stroke-dasharray", `${totalLength} ${totalLength}`)
+            .attr("stroke-dashoffset", totalLength)
+            .transition()
+            .duration(6800)
+            .ease(d3.easeCubicInOut)
+            .attr("stroke-dashoffset", 0)
+            .on("end", function() {
+                circles.transition()
+                    .duration(250)
+                    .style("opacity", 1);
+            });
+    
+        image.transition()
+            .duration(6800)
+            .ease(d3.easeCubicInOut)
+            .attrTween("transform", function() {
+                return function(t) {
+                    const point = path.node().getPointAtLength(t * totalLength);
+                    return `translate(${point.x + 10},${point.y - 25})`;
+                };
+            });
+    </script>
+</body>
+</html>

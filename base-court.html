@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Court Reference Image</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #86ac91;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .svg-container {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            aspect-ratio: 4 / 3;
+        }
+
+        svg {
+            width: 60%;
+            height: 90%;
+            display: block;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        text {
+            fill: white;
+            font-size: 12px;
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <svg width="350" height="700"></svg>
+    
+    <script>
+        const svg = d3.select("svg");
+        const width = +svg.attr("width");
+        const height = +svg.attr("height");
+
+        const xScale = d3.scaleLinear()
+                         .domain([-250, 250])
+                         .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+                         .domain([-490, 490])
+                         .range([height, 0]);
+
+        svg.append("rect")
+           .attr("x", xScale(-210))
+           .attr("y", yScale(455))
+           .attr("width", xScale(210) - xScale(-210))
+           .attr("height", yScale(-455) - yScale(455))
+           .attr("fill", "#6092ce");
+
+        const courtLines = [
+            { x1: 210, y1: 455, x2: 210, y2: -455 },
+            { x1: -210, y1: 455, x2: -210, y2: -455 },
+            { x1: 157.5, y1: 455, x2: 157.5, y2: -455 },
+            { x1: -157.5, y1: 455, x2: -157.5, y2: -455 },
+            { x1: 0, y1: 245, x2: 0, y2: -245 },
+            { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
+            { x1: 157.5, y1: 245, x2: -157.5, y2: 245 },
+            { x1: 250, y1: 0, x2: -250, y2: 0 },
+            { x1: 212.25, y1: -455, x2: -212.25, y2: -455 },
+            { x1: 212.25, y1: 455, x2: -212.25, y2: 455 }
+        ];
+
+        svg.selectAll("line")
+           .data(courtLines)
+           .enter()
+           .append("line")
+           .attr("x1", function(d) { return xScale(d.x1); })
+           .attr("y1", function(d) { return yScale(d.y1); })
+           .attr("x2", function(d) { return xScale(d.x2); })
+           .attr("y2", function(d) { return yScale(d.y2); })
+           .attr("stroke", "white")
+           .attr("stroke-width", 4);
+
+        // X coord labels
+        const verticalMarks = [-210, -157.5, 0, 157.5, 210];
+        svg.selectAll(".vertical-mark")
+           .data(verticalMarks)
+           .enter()
+           .append("text")
+           .attr("x", d => xScale(d))
+           .attr("y", yScale(-455) + 20) 
+           .attr("text-anchor", "middle")
+           .text(d => d);
+
+        // Y coord labels
+        const horizontalMarks = [-455, -245, 0, 245, 455];
+        svg.selectAll(".horizontal-mark")
+           .data(horizontalMarks)
+           .enter()
+           .append("text")
+           .attr("x", xScale(250) + 10)
+           .attr("y", d => yScale(d) + 4)
+           .attr("text-anchor", "middle")
+           .text(d => d);
+    </script>
+</body>
+</html>
