@@ -36,12 +36,6 @@
             fill: white;
             text-anchor: middle;
         }
-
-        .dashed-line {
-            stroke: white;
-            stroke-width: 2;
-            stroke-dasharray: 5,5;
-        }
     </style>
 </head>
 <body>
@@ -124,7 +118,6 @@
                 .attr("y2", function(d) { return yScale(d.y2); })
                 .attr("stroke", "white")
                 .attr("stroke-width", function(d) {
-                    // Increase the stroke width for the net line at y = 0
                     return d.width ? d.width : 4;
                 });
 

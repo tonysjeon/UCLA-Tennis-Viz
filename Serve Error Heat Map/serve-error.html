@@ -39,8 +39,19 @@
             text-anchor: middle;
         }
 
+        .count-text {
+            font-size: 18px;
+            font-weight: bold;
+            fill: white;
+            text-anchor: middle;
+        }
+
         .contour {
             fill-opacity: 0.8;
+        }
+
+        .diagonal-pattern {
+            stroke-width: 2;
         }
     </style>
 </head>
@@ -49,87 +60,176 @@
     
     <script>
         d3.json("serve_errors.json").then(function(serve_errors) {
-            const svg = d3.select("svg");
-            const width = +svg.attr("width");
-            const height = +svg.attr("height");
+            d3.json("serve_errorDist.json").then(function(serve_errorDist) {
 
-            const xScale = d3.scaleLinear()
-                             .domain([-250, 250])
-                             .range([0, width]);
+                const svg = d3.select("svg");
+                const width = +svg.attr("width");
+                const height = +svg.attr("height");
 
-            const yScale = d3.scaleLinear()
-                             .domain([-470, 70])
-                             .range([height, 0]);
+                const xScale = d3.scaleLinear()
+                                .domain([-260, 260])
+                                .range([0, width]);
 
-            svg.append("text")
-               .attr("class", "title")
-               .attr("x", width / 2)
-               .attr("y", 32.5)
-               .text("Serve Error Distribution - " + serve_errors[0].serverName);
+                const yScale = d3.scaleLinear()
+                                .domain([-470, 70])
+                                .range([height, 0]);
 
-            svg.append("rect")
-               .attr("x", xScale(-210))
-               .attr("y", yScale(30))
-               .attr("width", xScale(210) - xScale(-210))
-               .attr("height", yScale(-460) - yScale(25))
-               .attr("fill", "#6092ce");
+                // Define the diagonal pattern for the zones
+                const defs = svg.append("defs");
 
-            const courtLines = [
-                { x1: 210, y1: 30, x2: 210, y2: -455 },
-                { x1: -210, y1: 30, x2: -210, y2: -455 },
-                { x1: 157.5, y1: 30, x2: 157.5, y2: -455 },
-                { x1: -157.5, y1: 30, x2: -157.5, y2: -455 },
-                { x1: 240, y1: 0, x2: -240, y2: 0 },
-                { x1: 0, y1: 30, x2: 0, y2: -245 },
-                { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
-                { x1: 211.25, y1: -455, x2: -211.25, y2: -455 },
-                { x1: 0, y1: -445, x2: 0, y2: -455 }
-            ];
+                const pattern = defs.selectAll("pattern")
+                    .data([
+                        { id: "greenDiagonal", color: "#00cc00" },
+                        { id: "redDiagonal", color: "red" },
+                        { id: "yellowDiagonal", color: "yellow" }
+                    ])
+                    .enter()
+                    .append("pattern")
+                    .attr("id", d => d.id)
+                    .attr("patternUnits", "userSpaceOnUse")
+                    .attr("width", 10)
+                    .attr("height", 10);
 
-            svg.selectAll("line")
-               .data(courtLines)
-               .enter()
-               .append("line")
-               .attr("x1", function(d) { return xScale(d.x1); })
-               .attr("y1", function(d) { return yScale(d.y1); })
-               .attr("x2", function(d) { return xScale(d.x2); })
-               .attr("y2", function(d) { return yScale(d.y2); })
-               .attr("stroke", "white")
-               .attr("stroke-width", 4);
+                pattern.append("path")
+                    .attr("d", "M0,0 L10,10")  // Diagonal line
+                    .attr("stroke", d => d.color)
+                    .attr("class", "diagonal-pattern");
 
-            const labels = [
-                { label: "Ad", x: -78.25, y: -440 },
-                { label: "Deuce", x: 78.25, y: -440 }
-            ];
+                // Plot title
+                svg.append("text")
+                .attr("class", "title")
+                .attr("x", width / 2)
+                .attr("y", 32.5)
+                .text("Serve Error Distribution - " + serve_errors[0].serverName);
 
-            svg.selectAll("text.label-text")
-               .data(labels)
-               .enter()
-               .append("text")
-               .attr("class", "label-text")
-               .attr("x", d => xScale(d.x))
-               .attr("y", d => yScale(d.y))
-               .text(d => d.label);
+                svg.append("rect")
+                .attr("x", xScale(-210))
+                .attr("y", yScale(30))
+                .attr("width", xScale(210) - xScale(-210))
+                .attr("height", yScale(-460) - yScale(25))
+                .attr("fill", "#6092ce");
 
-            const densityData = d3.contourDensity()
-                                  .x(d => xScale(d.x))
-                                  .y(d => yScale(d.y))
-                                  .size([width, height])
-                                  .bandwidth(15)(serve_errors);
+                const courtLines = [
+                    { x1: 210, y1: 30, x2: 210, y2: -455 },
+                    { x1: -210, y1: 30, x2: -210, y2: -455 },
+                    { x1: 157.5, y1: 30, x2: 157.5, y2: -455 },
+                    { x1: -157.5, y1: 30, x2: -157.5, y2: -455 },
+                    { x1: 240, y1: 0, x2: -240, y2: 0 },
+                    { x1: 0, y1: 30, x2: 0, y2: -245 },
+                    { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
+                    { x1: 211.25, y1: -455, x2: -211.25, y2: -455 },
+                    { x1: 0, y1: -445, x2: 0, y2: -455 }
+                ];
 
-            const maxDensity = d3.max(densityData, d => d.value);
+                svg.selectAll("line")
+                .data(courtLines)
+                .enter()
+                .append("line")
+                .attr("x1", function(d) { return xScale(d.x1); })
+                .attr("y1", function(d) { return yScale(d.y1); })
+                .attr("x2", function(d) { return xScale(d.x2); })
+                .attr("y2", function(d) { return yScale(d.y2); })
+                .attr("stroke", "white")
+                .attr("stroke-width", 4);
 
-            const colorScale = d3.scaleLinear()
-                .domain([0, maxDensity * 0.1, maxDensity * 0.3, maxDensity * 0.4, maxDensity * 0.6, maxDensity])
-                .range(["#6092ce", "#5a7bed", "yellow", "#ffcc00", "orange", "red"]);
+                // Serve error distribution labels
+                const counts = [
+                    { label: serve_errorDist.find(d => d.type === "Ad Net")?.count || 0, x: -78.75, y: -100, zone: "Ad Net" },
+                    { label: serve_errorDist.find(d => d.type === "Ad Wide")?.count || 0, x: -78.75, y: -130, zone: "Ad Wide" },
+                    { label: serve_errorDist.find(d => d.type === "Ad Long")?.count || 0, x: -78.75, y: -160, zone: "Ad Long" },
+                    { label: serve_errorDist.find(d => d.type === "Deuce Net")?.count || 0, x: 78.75, y: -100, zone: "Deuce Net" },
+                    { label: serve_errorDist.find(d => d.type === "Deuce Wide")?.count || 0, x: 78.75, y: -130, zone: "Deuce Wide" },
+                    { label: serve_errorDist.find(d => d.type === "Deuce Long")?.count || 0, x: 78.75, y: -160, zone: "Deuce Long" }
+                ];
 
-            svg.selectAll("path.contour")
-               .data(densityData)
-               .enter()
-               .append("path")
-               .attr("class", "contour")
-               .attr("d", d3.geoPath())
-               .attr("fill", d => colorScale(d.value));
+                svg.selectAll(".count-rect")
+                    .data(counts)
+                    .enter()
+                    .append("rect")
+                    .attr("class", "count-rect")
+                    .attr("x", d => xScale(d.x) - 25.5)
+                    .attr("y", d => yScale(d.y) - 17.75)
+                    .attr("width", 50)
+                    .attr("height", 24)
+                    .attr("rx", 12)
+                    .attr("ry", 12)
+                    .attr("fill", function(d) {
+                        if (d.zone.includes("Net")) {
+                            return "rgba(255, 255, 0, 0.6)";  // Same as yellow zone (Net)
+                        } else if (d.zone.includes("Wide")) {
+                            return "rgba(0, 204, 0, 0.6)";  // Same as green zone (Wide)
+                        } else if (d.zone.includes("Long")) {
+                            return "rgba(255, 0, 0, 0.6)";  // Same as red zone (Long)
+                        }
+                    })
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 1);
+                
+                svg.selectAll("count-text")
+                   .data(counts)
+                   .enter()
+                   .append("text")
+                   .attr("class", "count-text")
+                   .attr("x", d => xScale(d.x))
+                   .attr("y", d => yScale(d.y))
+                   .text(d => d.label);
+
+
+                // Serve error zones
+                const diagonalSquares = [
+                    { x: -260, y: -1.75, width: 100.75, height: -243.25, fill: "url(#greenDiagonal)", opacity: 0.5 },  // Ad Wide
+                    { x: 159.25, y: -1.75, width: 102.5, height: -243.25, fill: "url(#greenDiagonal)", opacity: 0.5},  // Deuce Wide
+                    { x: -260, y: -245, width: 520, height: -460, fill: "url(#redDiagonal)", opacity: 0.5 },  // Long
+                    { x: -155, y: 20, width: 310, height: -40, fill: "url(#yellowDiagonal)", opacity: 0.5 }  // Net
+                ];
+
+                svg.selectAll("rect.diagonal-square")
+                .data(diagonalSquares)
+                .enter()
+                .append("rect")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => yScale(d.y))
+                .attr("width", d => xScale(d.x + d.width) - xScale(d.x))
+                .attr("height", d => yScale(d.height) - yScale(0))
+                .attr("fill", d => d.fill)
+                .attr("fill-opacity", d => d.opacity);
+                
+                // Plotting density data
+                const densityData = d3.contourDensity()
+                                    .x(d => xScale(d.x))
+                                    .y(d => yScale(d.y))
+                                    .size([width, height])
+                                    .bandwidth(15)(serve_errors);
+
+                const maxDensity = d3.max(densityData, d => d.value);
+
+                const colorScale = d3.scaleLinear()
+                    .domain([0, maxDensity * 0.1, maxDensity * 0.3, maxDensity * 0.4, maxDensity * 0.6, maxDensity])
+                    .range(["#6092ce", "#5a7bed", "yellow", "#ffcc00", "orange", "red"]);
+
+                svg.selectAll("path.contour")
+                .data(densityData)
+                .enter()
+                .append("path")
+                .attr("class", "contour")
+                .attr("d", d3.geoPath())
+                .attr("fill", d => colorScale(d.value));
+
+                // Court side labels
+                const labels = [
+                    { label: "Ad", x: -78.25, y: -440 },
+                    { label: "Deuce", x: 78.25, y: -440 }
+                ];
+
+                svg.selectAll("text.label-text")
+                .data(labels)
+                .enter()
+                .append("text")
+                .attr("class", "label-text")
+                .attr("x", d => xScale(d.x))
+                .attr("y", d => yScale(d.y))
+                .text(d => d.label);
+            });
         });
     </script>
 </body>
