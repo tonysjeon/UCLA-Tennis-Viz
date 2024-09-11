@@ -39,6 +39,13 @@
             text-anchor: middle;
         }
 
+        .central-text {
+            font-size: 14px;
+            font-weight: bold;
+            fill: white;
+            text-anchor: middle;
+        }
+
         .count-text {
             font-size: 18px;
             font-weight: bold;
@@ -48,10 +55,6 @@
 
         .contour {
             fill-opacity: 0.8;
-        }
-
-        .diagonal-pattern {
-            stroke-width: 2;
         }
     </style>
 </head>
@@ -73,27 +76,6 @@
                 const yScale = d3.scaleLinear()
                                 .domain([-470, 70])
                                 .range([height, 0]);
-
-                // Define the diagonal pattern for the zones
-                const defs = svg.append("defs");
-
-                const pattern = defs.selectAll("pattern")
-                    .data([
-                        { id: "greenDiagonal", color: "#00cc00" },
-                        { id: "redDiagonal", color: "red" },
-                        { id: "yellowDiagonal", color: "yellow" }
-                    ])
-                    .enter()
-                    .append("pattern")
-                    .attr("id", d => d.id)
-                    .attr("patternUnits", "userSpaceOnUse")
-                    .attr("width", 10)
-                    .attr("height", 10);
-
-                pattern.append("path")
-                    .attr("d", "M0,0 L10,10")  // Diagonal line
-                    .attr("stroke", d => d.color)
-                    .attr("class", "diagonal-pattern");
 
                 // Plot title
                 svg.append("text")
@@ -154,12 +136,10 @@
                     .attr("rx", 12)
                     .attr("ry", 12)
                     .attr("fill", function(d) {
-                        if (d.zone.includes("Net")) {
-                            return "rgba(255, 255, 0, 0.6)";  // Same as yellow zone (Net)
-                        } else if (d.zone.includes("Wide")) {
-                            return "rgba(0, 204, 0, 0.6)";  // Same as green zone (Wide)
-                        } else if (d.zone.includes("Long")) {
-                            return "rgba(255, 0, 0, 0.6)";  // Same as red zone (Long)
+                        if (d.zone.includes("Ad")) {
+                            return "#cc3333";
+                        } else if (d.zone.includes("Deuce")) {
+                            return "#fcb603";
                         }
                     })
                     .attr("stroke", "white")
@@ -174,26 +154,38 @@
                    .attr("y", d => yScale(d.y))
                    .text(d => d.label);
 
-
-                // Serve error zones
-                const diagonalSquares = [
-                    { x: -260, y: -1.75, width: 100.75, height: -243.25, fill: "url(#greenDiagonal)", opacity: 0.5 },  // Ad Wide
-                    { x: 159.25, y: -1.75, width: 102.5, height: -243.25, fill: "url(#greenDiagonal)", opacity: 0.5},  // Deuce Wide
-                    { x: -260, y: -245, width: 520, height: -460, fill: "url(#redDiagonal)", opacity: 0.5 },  // Long
-                    { x: -155, y: 20, width: 310, height: -40, fill: "url(#yellowDiagonal)", opacity: 0.5 }  // Net
+                // Central count labels
+                const centralLabels = [
+                    { label: "Net", x: 0, y: -100 },
+                    { label: "Wide", x: 0, y: -130 },
+                    { label: "Long", x: 0, y: -160 }
                 ];
 
-                svg.selectAll("rect.diagonal-square")
-                .data(diagonalSquares)
-                .enter()
-                .append("rect")
-                .attr("x", d => xScale(d.x))
-                .attr("y", d => yScale(d.y))
-                .attr("width", d => xScale(d.x + d.width) - xScale(d.x))
-                .attr("height", d => yScale(d.height) - yScale(0))
-                .attr("fill", d => d.fill)
-                .attr("fill-opacity", d => d.opacity);
-                
+                svg.selectAll(".central-rect")
+                    .data(centralLabels)
+                    .enter()
+                    .append("rect")
+                    .attr("class", "central-rect")
+                    .attr("x", d => xScale(d.x) - 25.5)
+                    .attr("y", d => yScale(d.y) - 16.5)
+                    .attr("width", 50)
+                    .attr("height", 24)
+                    .attr("rx", 12)
+                    .attr("ry", 12)
+                    .attr("fill", "#b0b0b0")
+                    .attr("stroke", "white")
+                    .attr("stroke-width", 1);
+
+                svg.selectAll(".central-label")
+                    .data(centralLabels)
+                    .enter()
+                    .append("text")
+                    .attr("x", d => xScale(d.x))
+                    .attr("y", d => yScale(d.y))
+                    .text(d => d.label)
+                    .attr("class", "central-text")
+
+
                 // Plotting density data
                 const densityData = d3.contourDensity()
                                     .x(d => xScale(d.x))
@@ -217,8 +209,8 @@
 
                 // Court side labels
                 const labels = [
-                    { label: "Ad", x: -78.25, y: -440 },
-                    { label: "Deuce", x: 78.25, y: -440 }
+                    { label: "Ad", x: -78.25, y: -75 },
+                    { label: "Deuce", x: 78.25, y: -75 }
                 ];
 
                 svg.selectAll("text.label-text")
