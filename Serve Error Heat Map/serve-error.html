@@ -137,13 +137,13 @@
                     .attr("ry", 12)
                     .attr("fill", function(d) {
                         if (d.zone.includes("Ad")) {
-                            return "#cc3333";
+                            return "#1c7ed6";
                         } else if (d.zone.includes("Deuce")) {
-                            return "#fcb603";
+                            return "#756bb1";
                         }
                     })
                     .attr("stroke", "white")
-                    .attr("stroke-width", 1);
+                    .attr("stroke-width", 1.5);
                 
                 svg.selectAll("count-text")
                    .data(counts)
@@ -174,7 +174,7 @@
                     .attr("ry", 12)
                     .attr("fill", "#b0b0b0")
                     .attr("stroke", "white")
-                    .attr("stroke-width", 1);
+                    .attr("stroke-width", 1.5);
 
                 svg.selectAll(".central-label")
                     .data(centralLabels)
@@ -187,25 +187,47 @@
 
 
                 // Plotting density data
-                const densityData = d3.contourDensity()
-                                    .x(d => xScale(d.x))
-                                    .y(d => yScale(d.y))
-                                    .size([width, height])
-                                    .bandwidth(15)(serve_errors);
+                // Ad side data
+                const adDensityData = d3.contourDensity()
+                    .x(d => xScale(d.x))
+                    .y(d => yScale(d.y))
+                    .size([width, height])
+                    .bandwidth(12.5)(serve_errors.filter(d => d.type.includes("Ad")));
 
-                const maxDensity = d3.max(densityData, d => d.value);
+                const adMaxDensity = d3.max(adDensityData, d => d.value);
 
-                const colorScale = d3.scaleLinear()
-                    .domain([0, maxDensity * 0.1, maxDensity * 0.3, maxDensity * 0.4, maxDensity * 0.6, maxDensity])
-                    .range(["#6092ce", "#5a7bed", "yellow", "#ffcc00", "orange", "red"]);
+                const adColorScale = d3.scaleLinear()
+                    .domain([adMaxDensity * 0.05, adMaxDensity * 0.15, adMaxDensity * 0.35, adMaxDensity * 0.6, adMaxDensity])
+                    .range(["#1c7ed6", "#bcbddc", "#f8f15a", "#f6a63b", "#d84315"]);
 
-                svg.selectAll("path.contour")
-                .data(densityData)
-                .enter()
-                .append("path")
-                .attr("class", "contour")
-                .attr("d", d3.geoPath())
-                .attr("fill", d => colorScale(d.value));
+                svg.selectAll("path.ad-contour")
+                    .data(adDensityData)
+                    .enter()
+                    .append("path")
+                    .attr("class", "ad-contour")
+                    .attr("d", d3.geoPath())
+                    .attr("fill", d => adColorScale(d.value));
+
+                // Deuce side data
+                const deuceDensityData = d3.contourDensity()
+                    .x(d => xScale(d.x))
+                    .y(d => yScale(d.y))
+                    .size([width, height])
+                    .bandwidth(12.5)(serve_errors.filter(d => d.type.includes("Deuce")));
+
+                const deuceMaxDensity = d3.max(deuceDensityData, d => d.value);
+
+                const deuceColorScale = d3.scaleLinear()
+                    .domain([adMaxDensity * 0.05, adMaxDensity * 0.15, adMaxDensity * 0.35, adMaxDensity * 0.6, adMaxDensity])
+                    .range(["#756bb1", "#bcbddc", "#f8f15a", "#f6a63b", "#d84315"]);
+
+                svg.selectAll("path.deuce-contour")
+                    .data(deuceDensityData)
+                    .enter()
+                    .append("path")
+                    .attr("class", "deuce-contour")
+                    .attr("d", d3.geoPath())
+                    .attr("fill", d => deuceColorScale(d.value));
 
                 // Court side labels
                 const labels = [
