@@ -38,22 +38,22 @@ The visuals generated from this data help to uncover patterns in a player's perf
 1. **Return of Serve Contact Points**  
    This visualization shows the location of return shots, where the player made contact with the ball, and the outcome of the point.
 
-   ![Return of Serve Contact Points](Power Ranking/Power_Ranking.gif)  <!-- Placeholder for Image 1 -->
+   ![Return of Serve Contact Points]('./Return Contact/ret-cont-demo.png')  <!-- Placeholder for Image 1 -->
 
 2. **Direction of Winner Shots (Forehand/Backhand)**  
    Shows where winning shots were directed, split by forehand and backhand.
 
-   ![Direction of Winner Shots](#)  <!-- Placeholder for Image 2 -->
+   ![Direction of Winner Shots]('./Winners/winners-demo.png')  <!-- Placeholder for Image 2 -->
 
 3. **Serve Heatmap**  
    A heatmap that tracks where serves are missing, providing insights on serve accuracy and tendencies.
 
-   ![Serve Heatmap](#)  <!-- Placeholder for Image 3 -->
+   ![Serve Heatmap]('./Serve Error Heat Map/serve-error-demo-elise.png')  <!-- Placeholder for Image 3 -->
 
 4. **Serve Result by Location**  
    This visual combines serve location data with point outcome, showing where serves land and whether the point was won or lost, with different colors indicating the result.
 
-   ![Serve Result by Location](#)  <!-- Placeholder for Image 4 -->
+   ![Serve Result by Location]('./Serve Placement/serve-place-demo.png')  <!-- Placeholder for Image 4 -->
 
 These visualizations can be combined with tennis domain knowledge to:
 
@@ -66,7 +66,7 @@ We are working on advanced visualizations such as:
 
 - **Point Replay (Bird-Eye View)**  
    A bird-eye view replay of points, allowing for a clearer understanding of point construction and shot decisions.  
-   ![Bird-Eye View Replay](#) <!-- Placeholder for Point Replay GIF -->
+   ![Bird-Eye View Replay]('./rally_demo_AO.gif') <!-- Placeholder for Point Replay GIF -->
 
 - **3D Visual Playback**  
    While not yet implemented, our goal is to create 3D playback visualizations similar to what IBM provides at the US Open. This will give players and coaches even more insight into movement and positioning on the court.  
