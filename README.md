@@ -48,12 +48,12 @@ The visuals generated from this data help to uncover patterns in a player's perf
 3. **Serve Heatmap**  
    A heatmap that tracks where serves are missing, providing insights on serve accuracy and tendencies.
 
-   ![Serve Heatmap]('./Serve Error Heat Map/serve-error-demo-elise.png')  <!-- Placeholder for Image 3 -->
+   ![Serve Heatmap](Serve%20Error%20Heat%20Map/serve-error-demo-elise.png)  <!-- Placeholder for Image 3 -->
 
 4. **Serve Result by Location**  
    This visual combines serve location data with point outcome, showing where serves land and whether the point was won or lost, with different colors indicating the result.
 
-   ![Serve Result by Location](Serve%Placement/serve-place-demo.png)  <!-- Placeholder for Image 4 -->
+   ![Serve Result by Location](Serve%20Placement/serve-place-demo.png)  <!-- Placeholder for Image 4 -->
 
 These visualizations can be combined with tennis domain knowledge to:
 
