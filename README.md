@@ -38,7 +38,7 @@ The visuals generated from this data help to uncover patterns in a player's perf
 1. **Return of Serve Contact Points**  
    This visualization shows the location of return shots, where the player made contact with the ball, and the outcome of the point.
 
-   ![Return of Serve Contact Points](Return Contact/ret-cont-demo.png)  <!-- Placeholder for Image 1 -->
+![Return of Serve Contact Points](./Return%20Contact/ret-cont-demo.png)
 
 2. **Direction of Winner Shots (Forehand/Backhand)**  
    Shows where winning shots were directed, split by forehand and backhand.
