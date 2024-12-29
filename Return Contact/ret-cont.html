@@ -115,7 +115,7 @@
 
                 // Forehand vs. Backhand
                 svg.selectAll("circle")
-                    .data(returns_ucla.filter(d => (d.shotFhBh === "Forehand" /* && d.isWinner !== 1.0*/)))
+                    .data(returns_ucla.filter(d => (d.shotFhBh === "Forehand")))
                     .enter()
                     .append("circle")
                     .attr("cx", function(d) { return xScale(d.shotContactX); })
@@ -132,7 +132,7 @@
                     });
                 
                 svg.selectAll("triangle")
-                    .data(returns_ucla.filter(d => (d.shotFhBh === "Backhand" /* && d.isWinner !== 1.0*/)))
+                    .data(returns_ucla.filter(d => (d.shotFhBh === "Backhand")))
                     .enter()
                     .append("polygon")
                     .attr("points", function(d) {
@@ -149,30 +149,6 @@
                             return "red";
                         }
                     });
-                
-                /*
-                svg.selectAll(".star")
-                    .data(returns_ucla.filter(d => d.isWinner === 1.0))
-                    .enter()
-                    .append("polygon")
-                    .attr("points", function(d) {
-                        const cx = xScale(d.shotContactX);
-                        const cy = yScale(d.shotContactY);
-                        const outerRadius = 8;
-                        const innerRadius = 4;
-                        let starPoints = "";
-                        for (let i = 0; i < 10; i++) {
-                            const angle = i * Math.PI / 5 - Math.PI / 2;
-                            const r = i % 2 === 0 ? outerRadius : innerRadius;
-                            const x = cx + r * Math.cos(angle);
-                            const y = cy + r * Math.sin(angle);
-                            starPoints += `${x},${y} `;
-                        }
-                        return starPoints.trim();
-                    })
-                    .attr("fill", "#f8c84f")
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 0.5); */
 
 
                 // Count + Win Pct. Boxes & Labels
@@ -265,8 +241,7 @@
 
                 const legendData = [
                     { label: "Won", color: "#00cc00"},
-                    { label: "Lost", color: "red"} /*,
-                    { label: "Winner", color: "#f8c84f", shape: "star" } */
+                    { label: "Lost", color: "red"}
                 ];
 
                 svg.append("rect")
@@ -303,29 +278,6 @@
                     .attr("fill", function(d) { return d.color; })
                     .attr("stroke", "black")
                     .attr("stroke-width", 1);     
-                
-                /* svg.selectAll(".legend-star")
-                    .data(legendData.filter(d => d.shape === "star"))
-                    .enter()
-                    .append("polygon")
-                    .attr("points", function(d) {
-                        const cx = legendX + 0.5;
-                        const cy = legendYStart + 2 * 25;
-                        const outerRadius = 7;
-                        const innerRadius = 3.5;
-                        let starPoints = "";
-                        for (let i = 0; i < 10; i++) {
-                            const angle = i * Math.PI / 5 - Math.PI / 2;
-                            const r = i % 2 === 0 ? outerRadius : innerRadius;
-                            const x = cx + r * Math.cos(angle);
-                            const y = cy + r * Math.sin(angle);
-                            starPoints += `${x},${y} `;
-                        }
-                        return starPoints.trim();
-                    })
-                    .attr("fill", "#f8c84f")
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 1); */
                 
                 svg.selectAll(".legend-label")
                     .data(legendData)

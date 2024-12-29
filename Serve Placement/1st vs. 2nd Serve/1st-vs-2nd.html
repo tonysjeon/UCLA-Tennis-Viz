@@ -81,23 +81,25 @@
                     { x1: -210, y1: 25, x2: -210, y2: -455 },
                     { x1: 157.5, y1: 25, x2: 157.5, y2: -455 },
                     { x1: -157.5, y1: 25, x2: -157.5, y2: -455 },
-                    { x1: 240, y1: 0, x2: -240, y2: 0 },
-                    { x1: 0, y1: 25, x2: 0, y2: -245 },
+                    { x1: 240, y1: 0, x2: -240, y2: 0, width: 7},
+                    { x1: 0, y1: 25, x2: 0, y2: -245},
                     { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
                     { x1: 211.25, y1: -455, x2: -211.25, y2: -455 },
                     { x1: 0, y1: -445, x2: 0, y2: -455 }
                 ];
 
                 svg.selectAll("line")
-                   .data(courtLines)
-                   .enter()
-                   .append("line")
-                   .attr("x1", function(d) { return xScale(d.x1); })
-                   .attr("y1", function(d) { return yScale(d.y1); })
-                   .attr("x2", function(d) { return xScale(d.x2); })
-                   .attr("y2", function(d) { return yScale(d.y2); })
-                   .attr("stroke", "white")
-                   .attr("stroke-width", 4);
+                    .data(courtLines)
+                    .enter()
+                    .append("line")
+                    .attr("x1", function(d) { return xScale(d.x1); })
+                    .attr("y1", function(d) { return yScale(d.y1); })
+                    .attr("x2", function(d) { return xScale(d.x2); })
+                    .attr("y2", function(d) { return yScale(d.y2); })
+                    .attr("stroke", "white")
+                    .attr("stroke-width", function(d) {
+                        return d.width ? d.width : 4;
+                    });
 
                 const dashedLines = [
                     { x: 52.5, y1: -245, y2: 0 },

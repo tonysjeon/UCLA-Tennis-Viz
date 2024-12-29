@@ -45,7 +45,7 @@
     </style>
 </head>
 <body style="background-color: #86ac91;">
-    <svg width="800" height="650"></svg>
+    <svg width="1100" height="800"></svg>
     
     <script>
         d3.json("serves_ucla.json").then(function(serves_ucla) {
@@ -56,54 +56,57 @@
                 const height = +svg.attr("height");
 
                 const xScale = d3.scaleLinear()
-                                 .domain([-250, 250])
+                                 .domain([-350, 350])
                                  .range([0, width]);
 
                 const yScale = d3.scaleLinear()
-                                 .domain([-470, 70])
+                                 .domain([-150, 600])
                                  .range([height, 0]);
 
                 svg.append("text")
                    .attr("class", "title")
                    .attr("x", width / 2)
-                   .attr("y", 32.5)
-                   .text("Serve Placement - " + serves_ucla[0].server);
+                   .attr("y", yScale(-125))
+                   .text("Serve Placement - " + serves_ucla[0].serverName);
 
                 svg.append("rect")
-                   .attr("x", xScale(-210))
-                   .attr("y", yScale(25))
-                   .attr("width", xScale(210) - xScale(-210))
-                   .attr("height", yScale(-455) - yScale(25))
-                   .attr("fill", "#6092ce");
+                    .attr("x", xScale(-210))
+                    .attr("y", yScale(455))
+                    .attr("width", xScale(210) - xScale(-210))
+                    .attr("height", yScale(-25) - yScale(455))
+                    .attr("fill", "#6092ce");
+
 
                 const courtLines = [
-                    { x1: 210, y1: 25, x2: 210, y2: -455 },
-                    { x1: -210, y1: 25, x2: -210, y2: -455 },
-                    { x1: 157.5, y1: 25, x2: 157.5, y2: -455 },
-                    { x1: -157.5, y1: 25, x2: -157.5, y2: -455 },
-                    { x1: 240, y1: 0, x2: -240, y2: 0 },
-                    { x1: 0, y1: 25, x2: 0, y2: -245 },
-                    { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
-                    { x1: 211.25, y1: -455, x2: -211.25, y2: -455 },
-                    { x1: 0, y1: -445, x2: 0, y2: -455 }
+                    { x1: 210, y1: -25, x2: 210, y2: 455 },
+                    { x1: -210, y1: -25, x2: -210, y2: 455 },
+                    { x1: 157.5, y1: -25, x2: 157.5, y2: 455 },
+                    { x1: -157.5, y1: -25, x2: -157.5, y2: 455 },
+                    { x1: 240, y1: 0, x2: -240, y2: 0, width: 7 },
+                    { x1: 0, y1: -25, x2: 0, y2: 245 },
+                    { x1: 157.5, y1: 245, x2: -157.5, y2: 245 },
+                    { x1: 211.25, y1: 455, x2: -211.25, y2: 455 },
+                    { x1: 0, y1: 445, x2: 0, y2: 455 }
                 ];
 
                 svg.selectAll("line")
-                   .data(courtLines)
-                   .enter()
-                   .append("line")
-                   .attr("x1", function(d) { return xScale(d.x1); })
-                   .attr("y1", function(d) { return yScale(d.y1); })
-                   .attr("x2", function(d) { return xScale(d.x2); })
-                   .attr("y2", function(d) { return yScale(d.y2); })
-                   .attr("stroke", "white")
-                   .attr("stroke-width", 4);
+                    .data(courtLines)
+                    .enter()
+                    .append("line")
+                    .attr("x1", function(d) { return xScale(d.x1); })
+                    .attr("y1", function(d) { return yScale(d.y1); })
+                    .attr("x2", function(d) { return xScale(d.x2); })
+                    .attr("y2", function(d) { return yScale(d.y2); })
+                    .attr("stroke", "white")
+                    .attr("stroke-width", function(d) {
+                        return d.width ? d.width : 4;
+                    });
 
                 const dashedLines = [
-                    { x: 52.5, y1: -245, y2: 0 },
-                    { x: 105, y1: -245, y2: 0 },
-                    { x: -52.5, y1: -245, y2: 0 },
-                    { x: -105, y1: -245, y2: 0 }
+                    { x: 52.5, y1: 245, y2: 0 },
+                    { x: 105, y1: 245, y2: 0 },
+                    { x: -52.5, y1: 245, y2: 0 },
+                    { x: -105, y1: 245, y2: 0 }
                 ];
 
                 svg.selectAll(".dashed-line")
@@ -117,14 +120,14 @@
                    .attr("class", "dashed-line");
 
                 const servePlacementLabels = [
-                    { label: "T", x: 26.25, y: -15 },
-                    { label: "T", x: -26.25, y: -15 },
-                    { label: "Body", x: 78.75, y: -15 },
-                    { label: "Body", x: -78.75, y: -15 },
-                    { label: "Wide", x: 131.25, y: -15 },
-                    { label: "Wide", x: -131.25, y: -15 },
-                    { label: "Ad", x: -78.25, y: -440 },
-                    { label: "Deuce", x: 78.25, y: -440 },
+                    { label: "T", x: 26.25, y: 20 },
+                    { label: "T", x: -26.25, y: 20 },
+                    { label: "Body", x: 78.75, y: 20 },
+                    { label: "Body", x: -78.75, y: 20 },
+                    { label: "Wide", x: 131.25, y: 20 },
+                    { label: "Wide", x: -131.25, y: 20 },
+                    { label: "Ad", x: 78.25, y: 260 },
+                    { label: "Deuce", x: -78.25, y: 260 },
                 ];
 
                 servePlacementLabels.forEach(function(d) {
@@ -134,13 +137,13 @@
                     .attr("y", yScale(d.y) + 5)
                     .attr("text-anchor", "middle")
                     .attr("fill", "white")
-                    .style("font-weight", "normal")
+                    .style("font-weight", "bold")
                     .text(d.label);
                 });
 
                 const winFreqLabels = [
-                    { label: "Win %", x: 183.75, y: -265 },
-                    { label: "Freq", x: 183.75, y: -295 }
+                    { label: "Win %", x: 183.75, y: -47.5 },
+                    { label: "Freq", x: 183.75, y: -80 }
                 ];
 
                 winFreqLabels.forEach(function(d) {
@@ -211,7 +214,7 @@
                    .append("rect")
                    .attr("class", "proportion-rect")
                    .attr("x", function(d) { return xScale(d.x) - 30; })
-                   .attr("y", yScale(-265) - 12)
+                   .attr("y", yScale(-47.5) - 12)
                    .attr("width", 60)
                    .attr("height", 24)
                    .attr("rx", 12)
@@ -230,7 +233,7 @@
                    .append("rect")
                    .attr("class", "count-rect")
                    .attr("x", function(d) { return xScale(d.x) - 20; })
-                   .attr("y", yScale(-295) - 12)
+                   .attr("y", yScale(-80) - 12)
                    .attr("width", 40)
                    .attr("height", 24)
                    .attr("rx", 12)
@@ -245,7 +248,7 @@
                    .append("text")
                    .attr("class", "proportion-label")
                    .attr("x", function(d) { return xScale(d.x); })
-                   .attr("y", yScale(-265) + 5)
+                   .attr("y", yScale(-47.5) + 5)
                    .attr("text-anchor", "middle")
                    .attr("fill", "white")
                    .text(function(d) { return d.proportion_label; });
@@ -256,7 +259,7 @@
                    .append("text")
                    .attr("class", "count-label")
                    .attr("x", function(d) { return xScale(d.x); })
-                   .attr("y", yScale(-295) + 5)
+                   .attr("y", yScale(-80) + 5)
                    .attr("text-anchor", "middle")
                    .attr("fill", "black")
                    .text(function(d) { return d.count_label; });
@@ -267,14 +270,14 @@
                     { label: "Ace", color: "#f8c84f", x: 40, shape: "star" }
                 ];
 
-                const legendX = xScale(170);
-                const legendYStart = 150;
+                const legendX = xScale(-25);
+                const legendYStart = 275;
 
                 svg.append("rect")
-                    .attr("x", legendX - 10.5)
-                    .attr("y", legendYStart - 17.5)
-                    .attr("width", 65)
-                    .attr("height", 85)
+                    .attr("x", legendX - 125)
+                    .attr("y", legendYStart - 20)
+                    .attr("width", 325)
+                    .attr("height", 40)
                     .attr("rx", 12)
                     .attr("ry", 12)
                     .attr("fill", "none")
@@ -285,8 +288,8 @@
                     .data(legendData.filter(d => !d.shape))
                     .enter()
                     .append("circle")
-                    .attr("cx", legendX + 0.5)
-                    .attr("cy", function(d, i) { return legendYStart + i * 25; })
+                    .attr("cx", function(d, i) { return legendX + i * 90 - 80; })
+                    .attr("cy", legendYStart)
                     .attr("r", 5)
                     .attr("fill", function(d) { return d.color; })
                     .attr("stroke", "black")
@@ -297,8 +300,8 @@
                     .enter()
                     .append("polygon")
                     .attr("points", function(d) {
-                        const cx = legendX + 0.5;
-                        const cy = legendYStart + 2 * 25;
+                        const cx = legendX + 105;
+                        const cy = legendYStart;
                         const outerRadius = 7;
                         const innerRadius = 3.5;
                         let starPoints = "";
@@ -319,8 +322,8 @@
                     .data(legendData)
                     .enter()
                     .append("text")
-                    .attr("x", legendX + 14)
-                    .attr("y", function(d, i) { return legendYStart + i * 25 + 5.3; })
+                    .attr("x", function(d, i) { return legendX + i * 95 - 65; })
+                    .attr("y", legendYStart + 5)
                     .attr("text-anchor", "start")
                     .attr("fill", "white")
                     .text(function(d) { return d.label; });

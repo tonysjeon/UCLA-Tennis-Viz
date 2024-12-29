@@ -45,7 +45,7 @@
     </style>
 </head>
 <body style="background-color: #86ac91;">
-    <svg width="1000" height="700"></svg>
+    <svg width="1000" height="800"></svg>
     
     <script>
         d3.json("returns_place.json").then(function(returns_ucla) {
@@ -60,7 +60,7 @@
                                  .range([0, width]);
 
                 const yScale = d3.scaleLinear()
-                                 .domain([-600, 70])
+                                 .domain([-150, 600])
                                  .range([height, 0]);
 
                 const xPositionMapping = {
@@ -69,44 +69,42 @@
                     'right': 105
                 };
 
-                svg.append("text")
-                   .attr("class", "title")
-                   .attr("x", width / 2)
-                   .attr("y", 32.5)
-                   .text("Return Placement - " + returns_ucla[0].shotHitBy);
-
                 svg.append("rect")
-                   .attr("x", xScale(-210))
-                   .attr("y", yScale(25))
-                   .attr("width", xScale(210) - xScale(-210))
-                   .attr("height", yScale(-455) - yScale(25))
-                   .attr("fill", "#6092ce");
+                    .attr("x", xScale(-210))
+                    .attr("y", yScale(455))
+                    .attr("width", xScale(210) - xScale(-210))
+                    .attr("height", yScale(-25) - yScale(455))
+                    .attr("fill", "#6092ce");
+
 
                 const courtLines = [
-                    { x1: 210, y1: 25, x2: 210, y2: -455 },
-                    { x1: -210, y1: 25, x2: -210, y2: -455 },
-                    { x1: 157.5, y1: 25, x2: 157.5, y2: -455 },
-                    { x1: -157.5, y1: 25, x2: -157.5, y2: -455 },
-                    { x1: 240, y1: 0, x2: -240, y2: 0 },
-                    { x1: 0, y1: 25, x2: 0, y2: -245 },
-                    { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
-                    { x1: 211.25, y1: -455, x2: -211.25, y2: -455 },
-                    { x1: 0, y1: -445, x2: 0, y2: -455 }
+                    { x1: 210, y1: -25, x2: 210, y2: 455 },
+                    { x1: -210, y1: -25, x2: -210, y2: 455 },
+                    { x1: 157.5, y1: -25, x2: 157.5, y2: 455 },
+                    { x1: -157.5, y1: -25, x2: -157.5, y2: 455 },
+                    { x1: 240, y1: 0, x2: -240, y2: 0, width: 7 },
+                    { x1: 0, y1: -25, x2: 0, y2: 245 },
+                    { x1: 157.5, y1: 245, x2: -157.5, y2: 245 },
+                    { x1: 211.25, y1: 455, x2: -211.25, y2: 455 },
+                    { x1: 0, y1: 445, x2: 0, y2: 455 }
                 ];
+
                 svg.selectAll("line")
-                   .data(courtLines)
-                   .enter()
-                   .append("line")
-                   .attr("x1", function(d) { return xScale(d.x1); })
-                   .attr("y1", function(d) { return yScale(d.y1); })
-                   .attr("x2", function(d) { return xScale(d.x2); })
-                   .attr("y2", function(d) { return yScale(d.y2); })
-                   .attr("stroke", "white")
-                   .attr("stroke-width", 4);
+                    .data(courtLines)
+                    .enter()
+                    .append("line")
+                    .attr("x1", function(d) { return xScale(d.x1); })
+                    .attr("y1", function(d) { return yScale(d.y1); })
+                    .attr("x2", function(d) { return xScale(d.x2); })
+                    .attr("y2", function(d) { return yScale(d.y2); })
+                    .attr("stroke", "white")
+                    .attr("stroke-width", function(d) {
+                        return d.width ? d.width : 4;
+                });
 
                 const dashedLines = [
-                    { x: -52.5, y1: 0, y2: -455},
-                    { x: 52.5, y1: 0, y2: -455}
+                    { x: -52.5, y1: -25, y2: 455},
+                    { x: 52.5, y1: -25, y2: 455}
                 ];
 
                 svg.selectAll(".dashed-line")
@@ -126,7 +124,7 @@
                    .append("rect")
                    .attr("class", "proportion-rect")
                    .attr("x", function(d) { return xScale(xPositionMapping[d.width]) - 25; })
-                   .attr("y", yScale(-480) - 12)
+                   .attr("y", yScale(-50) - 12)
                    .attr("width", 50)
                    .attr("height", 24)
                    .attr("rx", 12)
@@ -145,7 +143,7 @@
                    .append("rect")
                    .attr("class", "count-rect")
                    .attr("x", function(d) { return xScale(xPositionMapping[d.width]) - 20; })
-                   .attr("y", yScale(-515) - 12)
+                   .attr("y", yScale(-82.5) - 12)
                    .attr("width", 40)
                    .attr("height", 24)
                    .attr("rx", 12)
@@ -160,7 +158,7 @@
                    .append("text")
                    .attr("class", "proportion-label")
                    .attr("x", function(d) { return xScale(xPositionMapping[d.width]); })
-                   .attr("y", yScale(-485))
+                   .attr("y", yScale(-55))
                    .attr("text-anchor", "middle")
                    .attr("fill", "white")
                    .text(function(d) { return d.win_percentage; });
@@ -171,34 +169,14 @@
                    .append("text")
                    .attr("class", "count-label")
                    .attr("x", function(d) { return xScale(xPositionMapping[d.width]); })
-                   .attr("y", yScale(-520))
+                   .attr("y", yScale(-87.5))
                    .attr("text-anchor", "middle")
                    .attr("fill", "black")
                    .text(function(d) { return d.freq; });
 
-                // Only Forehand and Backhand shots with circles
-                svg.selectAll("circle")
-                    .data(returns_ucla)
-                    .enter()
-                    .append("circle")
-                    .attr("cx", function(d) { return xScale(d.shotLocationX); })
-                    .attr("cy", function(d) { return yScale(d.shotLocationY); })
-                    .attr("r", 5)
-                    .attr("stroke", "black")
-                    .attr("stroke-width", 0.5)
-                    .attr("fill", function(d) {
-                        if (d.lastShotError == 1.0) {
-                            return "grey";  // Grey if last shot was an error
-                        } else if (d.pointWonBy === d.shotHitBy) {
-                            return "#00cc00";  // Green for win
-                        } else {
-                            return "red";  // Red for loss
-                        }
-                    });
-
                 const winFreqLabels = [
-                    { label: "Win %", x: 185, y: -480 },
-                    { label: "Freq", x: 185, y: -515 }
+                    { label: "Win %", x: 185, y: -50 },
+                    { label: "Freq", x: 185, y: -82.5 }
                 ];
 
                 winFreqLabels.forEach(function(d) {
@@ -223,12 +201,108 @@
                         .text(d.label);
                 });
 
+                const fixedLength = 30;  // Length of arrows
+
+                // Trajectory lines
+                svg.selectAll(".trajectory-line-outline")
+                    .data(returns_ucla)
+                    .enter()
+                    .append("line")
+                    .attr("class", "trajectory-line-outline")
+                    .attr("x1", function(d) { return xScale(d.shotLocationX); })
+                    .attr("y1", function(d) { return yScale(d.shotLocationY); })
+                    .attr("x2", function(d) {
+                        const dx = d.shotLocationX - d.shotContactX;
+                        const dy = d.shotLocationY - d.shotContactY;
+                        const length = Math.sqrt(dx * dx + dy * dy);
+                        const unitX = dx / length;
+                        return xScale(d.shotLocationX + fixedLength * unitX);
+                    })
+                    .attr("y2", function(d) {
+                        const dx = d.shotLocationX - d.shotContactX;
+                        const dy = d.shotLocationY - d.shotContactY;
+                        const length = Math.sqrt(dx * dx + dy * dy);
+                        const unitY = dy / length;
+                        return yScale(d.shotLocationY + fixedLength * unitY);
+                    })
+                    .attr("stroke", "black")
+
+                svg.selectAll(".trajectory-line")
+                    .data(returns_ucla)
+                    .enter()
+                    .append("line")
+                    .attr("class", "trajectory-line")
+                    .attr("x1", function(d) { return xScale(d.shotLocationX); })
+                    .attr("y1", function(d) { return yScale(d.shotLocationY); })
+                    .attr("x2", function(d) {
+                        const dx = d.shotLocationX - d.shotContactX;
+                        const dy = d.shotLocationY - d.shotContactY;
+                        const length = Math.sqrt(dx * dx + dy * dy);
+                        const unitX = dx / length;
+                        return xScale(d.shotLocationX + fixedLength * unitX);
+                    })
+                    .attr("y2", function(d) {
+                        const dx = d.shotLocationX - d.shotContactX;
+                        const dy = d.shotLocationY - d.shotContactY;
+                        const length = Math.sqrt(dx * dx + dy * dy);
+                        const unitY = dy / length;
+                        return yScale(d.shotLocationY + fixedLength * unitY);
+                    })
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 2)
+                    .attr("marker-end", "url(#arrowhead)");
+
+                svg.append("defs")
+                    .append("marker")
+                    .attr("id", "arrowhead-outline")
+                    .attr("viewBox", "0 0 10 10")
+                    .attr("refX", 5)
+                    .attr("refY", 5)
+                    .attr("markerWidth", 5)
+                    .attr("markerHeight", 5)
+                    .attr("orient", "auto")
+                    .append("path")
+                    .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+                    .attr("fill", "black");
+
+                svg.append("defs")
+                    .append("marker")
+                    .attr("id", "arrowhead")
+                    .attr("viewBox", "0 0 8 8")
+                    .attr("refX", 4)
+                    .attr("refY", 4)
+                    .attr("markerWidth", 4)
+                    .attr("markerHeight", 4)
+                    .attr("orient", "auto")
+                    .append("path")
+                    .attr("d", "M 0 0 L 8 4 L 0 8 Z")
+                    .attr("fill", "black");
+
+                // Plotting shot placement
+                svg.selectAll("circle")
+                    .data(returns_ucla)
+                    .enter()
+                    .append("circle")
+                    .attr("cx", function(d) { return xScale(d.shotLocationX); })
+                    .attr("cy", function(d) { return yScale(d.shotLocationY); })
+                    .attr("r", 5)
+                    .attr("stroke", "black")
+                    .attr("stroke-width", 0.5)
+                    .attr("fill", function(d) {
+                        if (d.isError && d.pointWonBy !== d.shotHitBy) {
+                            return "grey";  // Grey if last shot was an error
+                        } else if (d.pointWonBy === d.shotHitBy) {
+                            return "#00cc00";  // Green for win
+                        } else {
+                            return "red";  // Red for loss
+                        }
+                    });
+
                 // Legend
-                const legendY = yScale(-570);
-                const legendX = width / 2 - 265;
+                const legendY = yScale(-135);
+                const legendX = width / 2 - 280;
                 const legendGroup = svg.append("g");
 
-                // Big rounded rectangle around the entire key
                 legendGroup.append("rect")
                     .attr("x", legendX + 110)
                     .attr("y", legendY - 22.5)
@@ -240,7 +314,6 @@
                     .attr("stroke", "white")
                     .attr("stroke-width", 2);
 
-                // Circle for Forehand with green (winning shot)
                 legendGroup.append("circle")
                     .attr("cx", legendX + 145)
                     .attr("cy", legendY - 5)
@@ -257,7 +330,6 @@
                     .style("font-family", "'DM Sans', sans-serif")
                     .text("- Win");
 
-                // Circle for Forehand with red (losing shot)
                 legendGroup.append("circle")
                     .attr("cx", legendX + 250)
                     .attr("cy", legendY - 5)
@@ -291,6 +363,17 @@
                     .style("font-family", "'DM Sans', sans-serif")
                     .text("- Out/Net");
 
+                svg.append("text")
+                   .attr("class", "title")
+                   .attr("x", width / 2)
+                   .attr("y", yScale(-180))
+                   .text(function() {
+                        if (returns_ucla[0].isFiltered) {
+                            return returns_ucla[0].side + " Return Placement - " + returns_ucla[0].shotHitBy;
+                        } else {
+                            return "Return Placement - " + returns_ucla[0].shotHitBy;
+                        }
+                    });
             }); 
         });     
     </script>

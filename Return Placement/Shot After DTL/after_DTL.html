@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Placement</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #86ac91;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .svg-container {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            aspect-ratio: 4 / 3;
+        }
+
+        svg {
+            width: 80%;
+            display: block;
+            height: 100%;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            fill: white;
+            text-anchor: middle;
+        }
+    </style>
+</head>
+<body style="background-color: #86ac91;">
+    <svg width="1000" height="700"></svg>
+    
+    <script>
+        d3.json("after_DTL.json").then(function(returns_ucla) {
+
+            const svg = d3.select("svg");
+            const width = +svg.attr("width");
+            const height = +svg.attr("height");
+
+            const xScale = d3.scaleLinear()
+                             .domain([-350, 350])
+                             .range([0, width]);
+
+            const yScale = d3.scaleLinear()
+                             .domain([-600, 70])
+                             .range([height, 0]);
+
+            const xPositionMapping = {
+                'left': -105,
+                'mid': 0,
+                'right': 105
+            };
+
+            svg.append("text")
+               .attr("class", "title")
+               .attr("x", width / 2)
+               .attr("y", 32.5)
+               .text("Shot After FH Line - Deuce Side");
+
+            svg.append("rect")
+               .attr("x", xScale(-210))
+               .attr("y", yScale(25))
+               .attr("width", xScale(210) - xScale(-210))
+               .attr("height", yScale(-455) - yScale(25))
+               .attr("fill", "#6092ce");
+
+            const courtLines = [
+                { x1: 210, y1: 25, x2: 210, y2: -455 },
+                { x1: -210, y1: 25, x2: -210, y2: -455 },
+                { x1: 157.5, y1: 25, x2: 157.5, y2: -455 },
+                { x1: -157.5, y1: 25, x2: -157.5, y2: -455 },
+                { x1: 240, y1: 0, x2: -240, y2: 0, width: 7},
+                { x1: 0, y1: 25, x2: 0, y2: -245},
+                { x1: 157.5, y1: -245, x2: -157.5, y2: -245 },
+                { x1: 211.25, y1: -455, x2: -211.25, y2: -455 },
+                { x1: 0, y1: -445, x2: 0, y2: -455 }
+            ];
+
+            svg.selectAll("line")
+                .data(courtLines)
+                .enter()
+                .append("line")
+                .attr("x1", function(d) { return xScale(d.x1); })
+                .attr("y1", function(d) { return yScale(d.y1); })
+                .attr("x2", function(d) { return xScale(d.x2); })
+                .attr("y2", function(d) { return yScale(d.y2); })
+                .attr("stroke", "white")
+                .attr("stroke-width", function(d) {
+                    return d.width ? d.width : 4;
+            });
+
+            // Illustrate DTL arrow
+            svg.append("line")
+                .attr("x1", xScale(-125))
+                .attr("y1", yScale(-25))
+                .attr("x2", xScale(-125))
+                .attr("y2", yScale(-375))
+                .attr("stroke", "white")
+                .attr("stroke-width", 4)
+                .attr("marker-end", "url(#arrowhead)");
+
+            svg.append("defs")
+                .append("marker")
+                .attr("id", "arrowhead")
+                .attr("viewBox", "0 0 10 10")
+                .attr("refX", 5)
+                .attr("refY", 5)
+                .attr("markerWidth", 6)
+                .attr("markerHeight", 6)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M 0 0 L 10 5 L 0 10 Z")
+                .attr("fill", "white");
+
+            // Legend
+            const legendY = yScale(-510);
+            const legendX = width / 2 - 275;
+            const legendGroup = svg.append("g");
+
+            // Big rounded rectangle around the entire key
+            legendGroup.append("rect")
+                .attr("x", legendX + 110)
+                .attr("y", legendY - 22.5)
+                .attr("width", 350)
+                .attr("height", 35)
+                .attr("rx", 15)
+                .attr("ry", 15)
+                .attr("fill", "none")
+                .attr("stroke", "white")
+                .attr("stroke-width", 2);
+
+            // Circle for Forehand with green (winning shot)
+            legendGroup.append("circle")
+                .attr("cx", legendX + 145)
+                .attr("cy", legendY - 5)
+                .attr("r", 5)
+                .attr("fill", "#00cc00")
+                .attr("stroke", "black");
+
+            // Text for Win
+            legendGroup.append("text")
+                .attr("x", legendX + 155)
+                .attr("y", legendY)
+                .attr("text-anchor", "start")
+                .attr("fill", "white")
+                .style("font-family", "'DM Sans', sans-serif")
+                .text("- Win");
+
+            // Circle for Forehand with red (losing shot)
+            legendGroup.append("circle")
+                .attr("cx", legendX + 250)
+                .attr("cy", legendY - 5)
+                .attr("r", 5)
+                .attr("fill", "red")
+                .attr("stroke", "black");
+
+            // Text for Lost
+            legendGroup.append("text")
+                .attr("x", legendX + 260)
+                .attr("y", legendY)
+                .attr("text-anchor", "start")
+                .attr("fill", "white")
+                .style("font-family", "'DM Sans', sans-serif")
+                .text("- Lost");
+
+            // Circle for Forehand with grey (error)
+            legendGroup.append("circle")
+                .attr("cx", legendX + 355)
+                .attr("cy", legendY - 5)
+                .attr("r", 5)
+                .attr("fill", "grey")
+                .attr("stroke", "black");
+
+            // Text for Out/Net
+            legendGroup.append("text")
+                .attr("x", legendX + 365)
+                .attr("y", legendY)
+                .attr("text-anchor", "start")
+                .attr("fill", "white")
+                .style("font-family", "'DM Sans', sans-serif")
+                .text("- Out/Net");
+
+            // Only Forehand and Backhand shots with circles
+            svg.selectAll("circle")
+                .data(returns_ucla)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return xScale(d.shotLocationX); })
+                .attr("cy", function(d) { return yScale(d.shotLocationY); })
+                .attr("r", 5)
+                .attr("stroke", "black")
+                .attr("stroke-width", 0.5)
+                .attr("fill", function(d) {
+                    if (d.lastShotError == 1.0) {
+                        return "grey";  // Grey if last shot was an error
+                    } else if (d.pointWonBy === d.shotHitBy) {
+                        return "#00cc00";  // Green for win
+                    } else {
+                        return "red";  // Red for loss
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

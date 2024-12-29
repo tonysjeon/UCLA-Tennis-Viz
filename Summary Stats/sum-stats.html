@@ -64,9 +64,10 @@
 <body>
     <script>
         d3.json("summary_stats.json").then(function(summary_stats) {
+            const playerNames = Object.keys(summary_stats[0]).filter(name => name !== "Stat" && name !== "isProp" && name !== "isRallyStat");
             const nonRallyData = summary_stats.filter(d => d.isRallyStat === false);
             const rallyData = summary_stats.filter(d => d.isRallyStat === true && d.Stat !== "Average Rally Length");
-            const avgRallyLength = summary_stats.find(d => d.Stat === "Average Rally Length")["Elise Wagle"];
+            const avgRallyLength = summary_stats.find(d => d.Stat === "Average Rally Length")[playerNames[0]];
 
             const margin = {top: 20, right: 30, bottom: 40, left: 80},
                   width = 700 - margin.left - margin.right,
@@ -130,21 +131,21 @@
                 .enter().append("rect")
                 .attr("class", "barUCLA")
                 .attr("x", d => {
-                    const value = parseValue(d["Elise Wagle"], d.isProp);
+                    const value = parseValue(d[playerNames[0]], d.isProp);
                     if (d.isProp) {
                         return width / 2 - x(value.percentage) - 1.5;
                     } else {
-                        const total = parseValue(d["Elise Wagle"], false).count + parseValue(d["Motka Komac"], false).count;
+                        const total = parseValue(d[playerNames[0]], false).count + parseValue(d[playerNames[1]], false).count;
                         return width / 2 - x((value.count / total) * 100) - 1.5;
                     }
                 })
                 .attr("y", d => yNonRally(d.Stat) + yNonRally.bandwidth() / 4)
                 .attr("width", d => {
-                    const value = parseValue(d["Elise Wagle"], d.isProp);
+                    const value = parseValue(d[playerNames[0]], d.isProp);
                     if (d.isProp) {
                         return x(value.percentage);
                     } else {
-                        const total = parseValue(d["Elise Wagle"], false).count + parseValue(d["Motka Komac"], false).count;
+                        const total = parseValue(d[playerNames[0]], false).count + parseValue(d[playerNames[1]], false).count;
                         return x((value.count / total) * 100);
                     }
                 })
@@ -158,11 +159,11 @@
                 .attr("x", width / 2 + 1.5)
                 .attr("y", d => yNonRally(d.Stat) + yNonRally.bandwidth() / 4)
                 .attr("width", d => {
-                    const value = parseValue(d["Motka Komac"], d.isProp);
+                    const value = parseValue(d[playerNames[1]], d.isProp);
                     if (d.isProp) {
                         return x(value.percentage);
                     } else {
-                        const total = parseValue(d["Elise Wagle"], false).count + parseValue(d["Motka Komac"], false).count;
+                        const total = parseValue(d[playerNames[0]], false).count + parseValue(d[playerNames[1]], false).count;
                         return x((value.count / total) * 100);
                     }
                 })
@@ -172,8 +173,8 @@
                 .data(nonRallyData.concat(rallyData))
                 .enter().append("rect")
                 .filter(d => {
-                    const uclaValue = parseValue(d["Elise Wagle"], d.isProp);
-                    const oppValue = parseValue(d["Motka Komac"], d.isProp);
+                    const uclaValue = parseValue(d[playerNames[0]], d.isProp);
+                    const oppValue = parseValue(d[playerNames[1]], d.isProp);
                     const isAces = d.Stat === "Aces";
                     const isDoubleFaults = d.Stat === "Double Faults";
                     if (isDoubleFaults) return false;
@@ -182,7 +183,7 @@
                 })
                 .attr("class", "highlight-rect-UCLA")
                 .attr("x", d => {
-                    const uclaValue = parseValue(d["Elise Wagle"], d.isProp);
+                    const uclaValue = parseValue(d[playerNames[0]], d.isProp);
                     if (d.isProp) {
                         return width / 2 - x(100) - 56;
                     } else {
@@ -216,8 +217,8 @@
                 .data(nonRallyData.concat(rallyData))
                 .enter().append("rect")
                 .filter(d => {
-                    const uclaValue = parseValue(d["Elise Wagle"], d.isProp);
-                    const oppValue = parseValue(d["Motka Komac"], d.isProp);
+                    const uclaValue = parseValue(d[playerNames[0]], d.isProp);
+                    const oppValue = parseValue(d[playerNames[1]], d.isProp);
                     const isAces = d.Stat === "Aces";
                     const isDoubleFaults = d.Stat === "Double Faults";
                     if (isDoubleFaults) return false;
@@ -226,7 +227,7 @@
                 })
                 .attr("class", "highlight-rect-Opp")
                 .attr("x", d => {
-                    const oppValue = parseValue(d["Motka Komac"], d.isProp);
+                    const oppValue = parseValue(d[playerNames[1]], d.isProp);
                     if (d.isProp) {
                         return width / 2 + x(100) + 6.5;
                     } else {
@@ -282,16 +283,16 @@
                 .attr("width", x(100))
                 .attr("height", yRally.bandwidth() / 2);
 
-            svg.selectAll(".barUCLAally")
+            svg.selectAll(".barUCLARally")
                 .data(rallyData)
                 .enter().append("rect")
                 .attr("class", "barUCLA")
                 .attr("x", d => {
-                    const value = parseValue(d["Elise Wagle"], d.isProp);
+                    const value = parseValue(d[playerNames[0]], d.isProp);
                     return width / 2 - x(value.percentage) - 1.5;
                 })
                 .attr("y", d => yRally(d.Stat) + yRally.bandwidth() / 4)
-                .attr("width", d => x(parseValue(d["Elise Wagle"], d.isProp).percentage))
+                .attr("width", d => x(parseValue(d[playerNames[0]], d.isProp).percentage))
                 .attr("height", yRally.bandwidth() / 2);
 
             svg.selectAll(".barOppRally")
@@ -300,7 +301,7 @@
                 .attr("class", "barOpp")
                 .attr("x", width / 2 + 1.5)
                 .attr("y", d => yRally(d.Stat) + yRally.bandwidth() / 4)
-                .attr("width", d => x(parseValue(d["Motka Komac"], d.isProp).percentage))
+                .attr("width", d => x(parseValue(d[playerNames[1]], d.isProp).percentage))
                 .attr("height", yRally.bandwidth() / 2);
 
             // Stat labels
@@ -336,7 +337,7 @@
                     }
                 })
                 .attr("text-anchor", "middle")
-                .text(d => `${Math.round(parseValue(d["Elise Wagle"], true).percentage)}%`);
+                .text(d => `${Math.round(parseValue(d[playerNames[0]], true).percentage)}%`);
 
             svg.selectAll(".attemptsUCLA")
                 .data(nonRallyData.concat(rallyData))
@@ -353,7 +354,7 @@
                     }
                 })
                 .attr("text-anchor", "middle")
-                .text(d => `(${parseValue(d["Elise Wagle"], true).successful}/${parseValue(d["Elise Wagle"], true).total})`);
+                .text(d => `(${parseValue(d[playerNames[0]], true).successful}/${parseValue(d[playerNames[0]], true).total})`);
 
             // Percentage and attempts labels for opponent
             svg.selectAll(".percentageOpp")
@@ -371,7 +372,7 @@
                     }
                 })
                 .attr("text-anchor", "middle")
-                .text(d => `${Math.round(parseValue(d["Motka Komac"], true).percentage)}%`);
+                .text(d => `${Math.round(parseValue(d[playerNames[1]], true).percentage)}%`);
 
             svg.selectAll(".attemptsOpp")
                 .data(nonRallyData.concat(rallyData))
@@ -388,7 +389,7 @@
                     }
                 })
                 .attr("text-anchor", "middle")
-                .text(d => `(${parseValue(d["Motka Komac"], true).successful}/${parseValue(d["Motka Komac"], true).total})`);
+                .text(d => `(${parseValue(d[playerNames[1]], true).successful}/${parseValue(d[playerNames[1]], true).total})`);
 
             // Count labels for count stats
             svg.selectAll(".labelUCLA")
@@ -399,7 +400,7 @@
                 .attr("x", d => width / 2 - x(100) - 30)
                 .attr("y", d => yNonRally(d.Stat) + yNonRally.bandwidth() / 2 + 5)
                 .attr("text-anchor", "middle")
-                .text(d => d["Elise Wagle"]);
+                .text(d => d[playerNames[0]]);
 
             svg.selectAll(".labelOpp")
                 .data(nonRallyData)
@@ -409,22 +410,22 @@
                 .attr("x", d => width / 2 + x(100) + 30)
                 .attr("y", d => yNonRally(d.Stat) + yNonRally.bandwidth() / 2 + 5)
                 .attr("text-anchor", "middle")
-                .text(d => d["Motka Komac"]);
+                .text(d => d[playerNames[1]]);
 
             // Player name labels
             svg.append("text")
                 .attr("class", "player-label")
-                .attr("x", width / 2 - x(90))
+                .attr("x", width / 2 - x(70))
                 .attr("y", 12.5)
                 .attr("text-anchor", "end")
-                .text("Elise Wagle");
+                .text(playerNames[0]);
 
             svg.append("text")
                 .attr("class", "player-label")
-                .attr("x", width / 2 + x(90) - 10)
+                .attr("x", width / 2 + x(95) - 65)
                 .attr("y", 12.5)
                 .attr("text-anchor", "start")
-                .text("Motka Komac");
+                .text(playerNames[1]);
         });
     </script>
 </body>
