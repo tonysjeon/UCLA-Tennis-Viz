@@ -7,15 +7,17 @@ This repository provides a comprehensive system for tracking tennis shot and poi
 ## Datasets
 
 ### 1. `shot.csv`
+
 This dataset tracks **coordinate-level data** for each shot during a match, providing information such as the type of shot, where it was hit on the court, and where it landed.
 
-| shotType  | spinType | hitLocation          | landLocation      |
-|-----------|----------|----------------------|-------------------|
-| forehand  | topspin  | bottom right corner   | middle of the court|
+| shotType | spinType | hitLocation         | landLocation        |
+| -------- | -------- | ------------------- | ------------------- |
+| forehand | topspin  | bottom right corner | middle of the court |
 
 Each row in `shot.csv` provides detailed shot placement and characteristics, including shot type (e.g., forehand, lob), spin type (e.g., topspin), and the specific coordinates for where the shot was hit and landed on the court.
 
 ### 2. `point.csv`
+
 This dataset condenses the shot-level data into **point-level information**. Each row represents a single point, including:
 
 - **Server Name**
@@ -38,22 +40,22 @@ The visuals generated from this data help to uncover patterns in a player's perf
 1. **Return of Serve Contact Points**  
    This visualization shows the location of return shots, where the player made contact with the ball, and the outcome of the point.
 
-![Return of Serve Contact Points](./Return%20Contact/ret-cont-demo.png)
+![Return of Serve Contact Points](images/ret-cont-demo.png)
 
 2. **Direction of Winner Shots (Forehand/Backhand)**  
    Shows where winning shots were directed, split by forehand and backhand.
 
-   ![Direction of Winner Shots](Winners/winners-demo.png)  <!-- Placeholder for Image 2 -->
+   ![Direction of Winner Shots](images/winners-demo.png) <!-- Placeholder for Image 2 -->
 
 3. **Serve Heatmap**  
    A heatmap that tracks where serves are missing, providing insights on serve accuracy and tendencies.
 
-   ![Serve Heatmap](Serve%20Error%20Heat%20Map/serve-error-demo-elise.png)  <!-- Placeholder for Image 3 -->
+   ![Serve Heatmap](images/serve-error-demo.png) <!-- Placeholder for Image 3 -->
 
 4. **Serve Result by Location**  
    This visual combines serve location data with point outcome, showing where serves land and whether the point was won or lost, with different colors indicating the result.
 
-   ![Serve Result by Location](Serve%20Placement/serve-place-demo.png)  <!-- Placeholder for Image 4 -->
+   ![Serve Result by Location](images/serve-place-demo.png) <!-- Placeholder for Image 4 -->
 
 These visualizations can be combined with tennis domain knowledge to:
 
@@ -66,12 +68,12 @@ We are working on advanced visualizations such as:
 
 - **Point Replay (Bird-Eye View)**  
    A bird-eye view replay of points, allowing for a clearer understanding of point construction and shot decisions.  
-   ![Bird-Eye View Replay](rally_demo_AO.gif) <!-- Placeholder for Point Replay GIF -->
+   ![Bird-Eye View Replay](images/rally_demo_AO.gif) <!-- Placeholder for Point Replay GIF -->
 
 - **3D Visual Playback**  
    While not yet implemented, our goal is to create 3D playback visualizations similar to what IBM provides at the US Open. This will give players and coaches even more insight into movement and positioning on the court.  
    ![3D Playback Example](#) <!-- Placeholder for 3D Playback GIF -->
-   *Note: The example shown here is from IBM's US Open analysis and is not part of this project.*
+  _Note: The example shown here is from IBM's US Open analysis and is not part of this project._
 
 ## Consulting Process
 
