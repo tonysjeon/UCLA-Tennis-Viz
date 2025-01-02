@@ -1,4 +1,4 @@
-# Tennis Shot Placement Tracking Library
+# BTC Visualization Library
 
 ## Overview
 
@@ -75,7 +75,7 @@ The visuals generated from this data help to uncover patterns in a player's perf
    ![Serve Distribution](images/serve-dist-demo.png)
 
 8. **Net Errors**  
-   Depicts contact and direct of net errors along with color distinction of ground stroke type.
+   Depicts contact point and direction of net errors along with color distinction of ground stroke type.
 
    ![Net Errors](images/net-errors-demo.png)
 
