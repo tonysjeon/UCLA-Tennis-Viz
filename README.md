@@ -43,7 +43,7 @@ The visuals generated from this data help to uncover patterns in a player's perf
 ![Return of Serve Contact Points](images/ret-cont-demo.png)
 
 2. **Direction of Winner Shots (Forehand/Backhand)**  
-   Shows placement and direction of winning shots, distinguished as a forehand, backhand, or volley.
+   Shows placement and direction of winner shots (shots untouched by the opponent), distinguished by shot type: forehand, backhand, or volley.
 
    ![Direction of Winner Shots](images/winners-demo.png)
 
