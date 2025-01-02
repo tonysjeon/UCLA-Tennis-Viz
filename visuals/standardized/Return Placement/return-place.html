@@ -368,8 +368,13 @@
                    .attr("x", width / 2)
                    .attr("y", yScale(-180))
                    .text(function() {
-                        if (returns_ucla[0].isFiltered) {
-                            return returns_ucla[0].side + " Return Placement - " + returns_ucla[0].shotHitBy;
+                        if (returns_ucla[0].sideFiltered) {
+                            if (returns_ucla[0].fhBhFiltered) {
+                                return returns_ucla[0].shotFhBh + " " + returns_ucla[0].side + " Return Placement - " + returns_ucla[0].shotHitBy;
+                            }
+                            else {
+                                return returns_ucla[0].side + " Return Placement - " + returns_ucla[0].shotHitBy;
+                            }
                         } else {
                             return "Return Placement - " + returns_ucla[0].shotHitBy;
                         }
