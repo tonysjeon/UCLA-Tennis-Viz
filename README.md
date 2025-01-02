@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository provides a comprehensive system for tracking tennis shot and point-level data, visualizing it with D3.js, and offering actionable insights through data-driven analysis. The data is captured at a coordinate level and then processed to generate visuals that help quantify performance or identify areas for improvement. This can be used by tennis players and coaches to inform training, strategy, and match analysis.
+This repository provides a comprehensive system for tracking tennis shot and point-level data, visualizing it with D3.js. The data is captured at a coordinate level and then processed to generate visuals that help quantify performance or identify areas for improvement. This can be used by tennis players and coaches to inform training, strategy, and match analysis.
 
 ## Datasets
 
