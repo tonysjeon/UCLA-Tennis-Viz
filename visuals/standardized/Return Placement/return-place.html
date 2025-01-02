@@ -370,10 +370,10 @@
                    .text(function() {
                         if (returns_ucla[0].sideFiltered) {
                             if (returns_ucla[0].fhBhFiltered) {
-                                return "Return Placement - " + returns_ucla[0].shotFhBh + " " + returns_ucla[0].side
+                                return `Return Placement - ${returns_ucla[0].side} ${returns_ucla[0].shotFhBh}`
                             }
                             else {
-                                return "Return Placement - " + returns_ucla[0].side + " Side"
+                                return `Return Placement - ${returns_ucla[0].side} Side`
                             }
                         } else {
                             return "Return Placement"

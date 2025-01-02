@@ -85,7 +85,7 @@
                 .attr("class", "title")
                 .attr("x", width / 2)
                 .attr("y", yScale(-60))
-                .text("Serve Distribution - " + data[0].Server);
+                .text("Serve Distribution");
 
             svg.append("rect")
                 .attr("x", xScale(-210))
@@ -210,32 +210,20 @@
                             .attr("class", "legend")
                             .attr("transform", `translate(${width / 2 - 110}, ${height - 540})`);
 
-            const legendData = [
-                { color: "#f0d46c", text: "At least 40% of side's serves" },
-                { color: "#ece6b4", text: "Less than 40% of side's serves" },
-            ];
-
-            // Rectangles for legend color indicators
-            legend.selectAll("rect")
-                .data(legendData)
-                .enter()
-                .append("rect")
-                .attr("x", 0)
-                .attr("y", (d, i) => i * 30)
+            legend.append("rect")
+                .attr("x", -10)
+                .attr("y", 20) // Static y-coordinate
                 .attr("width", 25)
                 .attr("height", 25)
-                .attr("fill", d => d.color)
+                .attr("fill", "#f0d46c")
                 .attr("stroke", "black")
                 .attr("stroke-width", 1.2);
 
             // Legend text
-            legend.selectAll("text")
-                .data(legendData)
-                .enter()
-                .append("text")
-                .attr("x", 35)
-                .attr("y", (d, i) => i * 30 + 18)
-                .text(d => d.text)
+            legend.append("text")
+                .attr("x", 25)
+                .attr("y", 37.5)
+                .text("At least 40% of side's serves") // Static text
                 .attr("font-size", "14px")
                 .attr("fill", "white")
                 .attr("font-weight", "bold");

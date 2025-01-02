@@ -40,24 +40,26 @@ The visuals generated from this data help to uncover patterns in a player's perf
 1. **Return of Serve Contact Points**  
    This visualization shows the location of return of serve shots, where the player made contact with the ball, and the outcome of the point.
 
-![Return of Serve Contact Points](images/ret-cont-demo.png)
+   ![Return of Serve Contact Points](images/ret-cont-demo.png)
 
-2. **Direction of Winner Shots (Forehand/Backhand)**  
-   Shows placement and direction of winning shots, distinguished as a forehand, backhand, or volley.
-
-   ![Direction of Winner Shots](images/winners-demo.png)
-
-3. **Return Placement**  
+2. **Return Placement**  
    Depicts placement and direction of return of serve shots along with distribution of shots and point outcome. Further filtering is possible for side and ground stroke type (e.g. Ad returns or Deuce Forehand returns only)
 
-   ![Return Placement](images/ret-place-demo.png)
+   ![Return Placement](images/ret-place-demo-1.png)
 
-   ![Ad Return Placement](images/ad-ret-place-demo.png)
+   ![Ad Return Placement](images/ret-place-demo-2.png)
 
-4. **Serve Error Heatmap**  
+   ![Deuce Forehand Return Placement](images/ret-place-demo-3.png)
+
+3. **Serve Error Heatmap**  
    A heatmap that tracks where serves are missing, providing insights on serve accuracy and tendencies.
 
    ![Serve Heatmap](images/serve-error-demo.png)
+
+4. **Winner Placement**  
+   Shows placement and direction of winning shots, distinguished as a forehand, backhand, or volley.
+
+   ![Direction of Winner Shots](images/winners-demo.png)
 
 5. **Summary Statistics**  
    This graphic offers a detailed comparison of match statistics, highlighting performance metrics such as aces, double faults, serve success rates, break points saved, and rally lengths. It provides valuable insights into key performance differences.
