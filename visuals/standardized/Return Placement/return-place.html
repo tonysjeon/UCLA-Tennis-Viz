@@ -370,13 +370,13 @@
                    .text(function() {
                         if (returns_ucla[0].sideFiltered) {
                             if (returns_ucla[0].fhBhFiltered) {
-                                return returns_ucla[0].shotFhBh + " " + returns_ucla[0].side + " Return Placement - " + returns_ucla[0].shotHitBy;
+                                return "Return Placement - " + returns_ucla[0].shotFhBh + " " + returns_ucla[0].side
                             }
                             else {
-                                return returns_ucla[0].side + " Return Placement - " + returns_ucla[0].shotHitBy;
+                                return "Return Placement - " + returns_ucla[0].side + " Side"
                             }
                         } else {
-                            return "Return Placement - " + returns_ucla[0].shotHitBy;
+                            return "Return Placement"
                         }
                     });
             }); 
