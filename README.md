@@ -97,7 +97,7 @@ We are working on advanced visualizations such as:
 - **3D Visual Playback**  
    While not yet implemented, our goal is to create 3D playback visualizations similar to what IBM provides at the US Open. This will give players and coaches even more insight into movement and positioning on the court.  
    ![3D Playback Example](images/3D-playback.gif)  
-   Note: The example shown here is from IBM's US Open analysis and is not part of this project.\_
+   Note: The example shown here is from IBM's US Open analysis and is not part of this project.
 
 ## Consulting Process
 
