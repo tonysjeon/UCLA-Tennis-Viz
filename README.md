@@ -42,7 +42,7 @@ The visuals generated from this data help to uncover patterns in a player's perf
 
    ![Return of Serve Contact Points](images/ret-cont-demo.png)
 
-2. **Return Placement**  
+2. **1st Return Placement**  
    Depicts placement and direction of return of serve shots along with distribution of shots and point outcome. Further filtering is possible for side and ground stroke type (e.g. Ad returns or Deuce Forehand returns only)
 
    ![Return Placement](images/ret-place-demo-1.png)
