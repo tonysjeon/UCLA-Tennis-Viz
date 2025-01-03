@@ -289,7 +289,7 @@
                     .attr("stroke", "black")
                     .attr("stroke-width", 0.5)
                     .attr("fill", function(d) {
-                        if (d.isError && d.pointWonBy !== d.shotHitBy) {
+                        if (d.isError) {
                             return "grey";  // Grey if last shot was an error
                         } else if (d.pointWonBy === d.shotHitBy) {
                             return "#00cc00";  // Green for win
@@ -370,13 +370,13 @@
                    .text(function() {
                         if (returns_ucla[0].sideFiltered) {
                             if (returns_ucla[0].fhBhFiltered) {
-                                return `Return Placement - ${returns_ucla[0].side} ${returns_ucla[0].shotFhBh}`
+                                return `1st Return Placement - ${returns_ucla[0].side} ${returns_ucla[0].shotFhBh}`
                             }
                             else {
-                                return `Return Placement - ${returns_ucla[0].side} Side`
+                                return `1st Return Placement - ${returns_ucla[0].side} Side`
                             }
                         } else {
-                            return "Return Placement"
+                            return "1st Return Placement"
                         }
                     });
             }); 
