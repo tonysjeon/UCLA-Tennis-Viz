@@ -36,6 +36,18 @@
             fill: white;
             text-anchor: middle;
         }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            width: auto;
+            padding: 10px;
+            font-size: 12px;
+            background: white;
+            border: 1px solid black;
+            border-radius: 10px;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -208,6 +220,12 @@
                 }).join(" ");
             }
 
+            // Tool tip
+            const tooltip = d3.select("body")
+                .append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
             svg.selectAll(".winner-shape")
                 .data(winners)
                 .enter()
@@ -257,6 +275,27 @@
                     if (d.isVolley != 1.0) {
                         return yScale(d.shotLocationY);
                     }
+                })
+                // Tooltip event handlers
+                .on("mouseover", function(event, d) {
+                    tooltip.transition().duration(200).style("opacity", 0.9);
+
+                    // Convert milliseconds to hours:minutes:seconds
+                    const totalSeconds = Math.floor(d.pointStartTime / 1000); // Convert to seconds
+                    const hours = Math.floor(totalSeconds / 3600); // Extract hours
+                    const minutes = Math.floor((totalSeconds % 3600) / 60); // Extract remaining minutes
+                    const seconds = totalSeconds % 60; // Extract remaining seconds
+
+                    // Format as hh:mm:ss
+                    const formattedTime = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                    // Set tooltip content
+                    tooltip.html(`pointStartTime: ${d.pointStartTime}<br>Timestamp: ${formattedTime}`) 
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mouseout", function() {
+                    tooltip.transition().duration(500).style("opacity", 0);
                 });
 
 
