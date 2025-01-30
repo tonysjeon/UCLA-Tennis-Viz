@@ -100,11 +100,13 @@
             function parseValue(value, isProp) {
                 if (isProp) {
                     const [successful, total] = value.split('/').map(Number);
-                    return { successful, total, percentage: (successful / total) * 100 };
+                    const percentage = total > 0 ? (successful / total) * 100 : 0;
+                    return { successful, total, percentage };
                 } else {
                     return { count: +value };
                 }
             }
+
 
             // Background bars (non-rally stats)
             svg.selectAll(".barBackgroundUCLA")
